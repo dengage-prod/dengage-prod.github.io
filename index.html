@@ -13,6 +13,10 @@
           <span>Device Id:</span>
           <span id="deviceId"></span>
         </div>
+        <div>
+          <span>WEB Subscription:</span>
+          <span id="webSubscription"></span>
+        </div>
       </div>
       <span style="display: flex;">Bu site Prod ortamına bağlıdır.</span>
     </div>
@@ -28,6 +32,9 @@
           document.getElementById("token").innerHTML = "token alamadınız";
         } else {
           document.getElementById("token").innerHTML = token;
+          getSubscriptionText().then(result => {
+            document.getElementById("webSubscription").innerHTML = result;	
+          });
         }
       });
       dengage("getDeviceId", function(device_id) {
@@ -38,6 +45,12 @@
           document.getElementById("deviceId").innerHTML = device_id;
         }
       });
+      async function getSubscriptionText() {
+        var sw = await navigator.serviceWorker.ready;
+        var sub = await sw.pushManager.getSubscription();
+        var subscriptionText = JSON.stringify(sub.toJSON());
+        return subscriptionText;
+      }
     </script>
   </head>
   <body></body>
